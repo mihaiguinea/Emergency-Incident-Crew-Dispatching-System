@@ -1,0 +1,36 @@
+GUINEA Mihai - 315CD
+Fisier README tema 1
+
+Programul gestioneaza un sistem de simulare al incidentelor si unitatilor de interventie.
+Programul citeste date din fisierul de intrare tema1.in si practic simuleaza un dispecerat care preia incidente. Datele rezultate sunt afisate in fisierul de iesire tema1.out .
+
+
+In implementarea programului am folosit urmatoarele structuri de date:
+*Liste dublu inlantuite cu santinela:
+	incidentList : Lista ce contine incidentele
+	interventionList : Lista ce contine interventiile
+*Cozi:
+	queue_high, queue_medium, queue_low : trei cozi ce au rol de prioritizare a incidentelor in functie de gradul de urgenta
+	queue_avalabile_units : coada pentru a gestiona unitatile de interventie disponibile
+*Stiva:
+	Stiva_interventii: utilizata pentru a retine interventiile efectuate, pentru a ajuta la functia UNDO_LAST_DISPATCH
+	
+
+
+Functii(comenzi):
+	*ADD_INCIDENT : Adauga un incident nou in sistem si il introduce in coada de prioritizare corespunzatoare(high, medium sau low).
+	*CHECK_UNITS_AVAILABILITY: Afiseaza numarul de unitati care sunt gata de interventie in acel moment.
+	*DISPATCH: Trimite prima unitate disponibila la incidentul cu gradul de prioritizare cel mai mare(high > medium > low).
+	*UNDO_LAST_DISPATCH: Anuleaza ultimul dispatch( daca acesta nu a fost deja rezolvat), reintroducand incidentul in fata cozii de prioritizare si elibereaza unitatea de interventie.
+	*SOLVED_INCIDENT: Marcheaza un incident ca fiind rezolvat si elibereaza unitatea de interventie
+	*SHOW_UNIT: Aiseaza informatii despre o unitate de interventie pe baza unui ID primit.
+	*SHOW_INCIDENT: Afiseaza informatii despre un incident pe baza unui ID primit.
+	*SHOW_INTERVENTIONS: Afiseaza o lista cu toate interventiile.
+	
+Programul trateaza cazurile de eroare afisand mesajul stanadard "INVALID OPERATION! ERROR 404".
+
+	
+
+
+
+
