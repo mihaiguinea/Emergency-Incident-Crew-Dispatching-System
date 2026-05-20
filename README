@@ -1,33 +1,34 @@
-GUINEA Mihai - 315CD
-Fisier README tema 1
+# Emergency Dispatch & Incident Simulation System
 
-Programul gestioneaza un sistem de simulare al incidentelor si unitatilor de interventie.
-Programul citeste date din fisierul de intrare tema1.in si practic simuleaza un dispecerat care preia incidente. Datele rezultate sunt afisate in fisierul de iesire tema1.out .
+This program models and simulates an automated real-time emergency dispatch center. It processes incoming operational streams from the input file `tema1.in` and outputs the resulting logs, state changes, and metrics into `tema1.out`.
 
+## Data Structures Used
 
-In implementarea programului am folosit urmatoarele structuri de date:
-*Liste dublu inlantuite cu santinela:
-	incidentList : Lista ce contine incidentele
-	interventionList : Lista ce contine interventiile
-*Cozi:
-	queue_high, queue_medium, queue_low : trei cozi ce au rol de prioritizare a incidentelor in functie de gradul de urgenta
-	queue_avalabile_units : coada pentru a gestiona unitatile de interventie disponibile
-*Stiva:
-	Stiva_interventii: utilizata pentru a retine interventiile efectuate, pentru a ajuta la functia UNDO_LAST_DISPATCH
-	
+To achieve an efficient, event-driven workflow, the application implements the following core data structures:
 
+* **Doubly Linked Lists with Sentinel Nodes:**
+  * `incidentList`: Stores and manages all tracked incidents in the system.
+  * `interventionList`: Stores and manages the active/completed operations.
+* **Queues (FIFO):**
+  * `queue_high`, `queue_medium`, `queue_low`: Three distinct multi-level priority queues used to categorize and sequence incoming incidents based on their severity.
+  * `queue_available_units`: Manages available emergency field response units awaiting dispatch.
+* **Stack (LIFO):**
+  * `Stiva_interventii`: Tracks active dispatch states chronologically to facilitate rollback execution for the `UNDO_LAST_DISPATCH` operational hook.
 
-Functii(comenzi):
-	*ADD_INCIDENT : Adauga un incident nou in sistem si il introduce in coada de prioritizare corespunzatoare(high, medium sau low).
-	*CHECK_UNITS_AVAILABILITY: Afiseaza numarul de unitati care sunt gata de interventie in acel moment.
-	*DISPATCH: Trimite prima unitate disponibila la incidentul cu gradul de prioritizare cel mai mare(high > medium > low).
-	*UNDO_LAST_DISPATCH: Anuleaza ultimul dispatch( daca acesta nu a fost deja rezolvat), reintroducand incidentul in fata cozii de prioritizare si elibereaza unitatea de interventie.
-	*SOLVED_INCIDENT: Marcheaza un incident ca fiind rezolvat si elibereaza unitatea de interventie
-	*SHOW_UNIT: Aiseaza informatii despre o unitate de interventie pe baza unui ID primit.
-	*SHOW_INCIDENT: Afiseaza informatii despre un incident pe baza unui ID primit.
-	*SHOW_INTERVENTIONS: Afiseaza o lista cu toate interventiile.
-	
-Programul trateaza cazurile de eroare afisand mesajul stanadard "INVALID OPERATION! ERROR 404".
+## Implemented Commands & Core Functions
+
+* **`ADD_INCIDENT`**: Registers a new emergency log in the database and places it into its respective priority-driven triage queue (`high`, `medium`, or `low`).
+* **`CHECK_UNITS_AVAILABILITY`**: Returns the count of deployed response units currently stationed and ready for field service.
+* **`DISPATCH`**: Matches and routes the first available standby unit to the highest-priority unresolved incident (`high > medium > low`).
+* **`UNDO_LAST_DISPATCH`**: Reverses the most recent assignment (if unresolved), safely context-switching the field unit back to standby and pushing the incident back to the head of its priority queue.
+* **`SOLVED_INCIDENT`**: Marks a targeted active incident as completed, logging performance data and returning the assigned crew back to the availability pool.
+* **`SHOW_UNIT`**: Queries and outputs comprehensive runtime statistics and status for a specific emergency unit using its unique ID.
+* **`SHOW_INCIDENT`**: Queries and outputs precise structural details regarding a targeted incident based on its unique ID.
+* **`SHOW_INTERVENTIONS`**: Generates a sequential history report of all generated field operations.
+
+## Error Handling
+
+The architecture is structurally protected against corrupted workflows. Any edge case or invalid action triggers the system's standard telemetry fallback string: `"INVALID OPERATION! ERROR 404"`.
 
 	
 
